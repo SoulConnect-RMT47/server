@@ -1,3 +1,4 @@
+
 const { ZodError } = require("zod");
 function errorHandler(err, req, res, next) {
   if (err instanceof ZodError) {
@@ -5,6 +6,7 @@ function errorHandler(err, req, res, next) {
       message: err.errors[0].message,
     });
   }
+  
   switch (err.name) {
     case "EmailAlreadyExists":
       return res.status(400).json({

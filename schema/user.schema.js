@@ -21,6 +21,5 @@ const userCreaetionSchema = z.object({
     password: z.string().min(5, { message: "Password must be at least 5 characters long"}),
 });
 
-
-
 module.exports = {userSchema, userCreaetionSchema};
+
