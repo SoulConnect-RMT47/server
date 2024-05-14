@@ -1,6 +1,5 @@
 const { UserCollection } = require("../connections/collections");
 const { userCreaetionSchema } = require("../schema/user.schema");
-const { fromError } = require("zod-validation-error");
 
 class User {
   static async createUser({ email, password }) {
