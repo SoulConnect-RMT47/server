@@ -1,17 +1,26 @@
 const { UserCollection } = require("../connections/collections");
-const { userCreaetionSchema } = require("../schema/user.schema");
+const { hashPassword } = require("../helpers/bcrypt");
+const { userSchema } = require("../schema/user.schema");
 
 class User {
-  static async createUser({ email, password }) {
+  static async createUser(input) {
     try {
-      const data = { email, password };
+      let data = input;
+      userSchema.parse(data);
+      const isUsernameUnique = await UserCollection.findOne({
+        username: data.username,
+      });
+      if (isUsernameUnique) {
+        throw { name: "UsernameAlreadyExists" };
+      }
       const isEmailUnique = await UserCollection.findOne({
         email: data.email,
       });
       if (isEmailUnique) {
         throw { name: "EmailAlreadyExists" };
       }
-      userCreaetionSchema.parse(data);
+      const hashedPassword = hashPassword(data.password);
+      data.password = hashedPassword;
       const user = await UserCollection.insertOne(data);
       return user;
     } catch (err) {
@@ -21,4 +30,3 @@ class User {
 }
 
 module.exports = User;
-
