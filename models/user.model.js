@@ -1,7 +1,8 @@
+const { ObjectId } = require("mongodb");
 const { UserCollection } = require("../connections/collections");
 const { hashPassword, comparePassword } = require("../helpers/bcrypt");
 const { generateToken } = require("../helpers/jwt");
-const { userSchema, loginSchema } = require("../schema/user.schema");
+const { userSchema, loginSchema, updateSchema } = require("../schema/user.schema");
 
 class User {
   static async createUser(input) {
@@ -81,7 +82,29 @@ class User {
       throw err;
     }
   }
-
+  static async updateUserById(loggedInUser, input) {
+    // console.log("🚀 ~ User ~ updateUser ~ loggedInUser:", loggedInUser)
+    try {
+      let data = input;
+      // console.log("🚀 ~ User ~ updateUser ~ data:", data)
+      updateSchema.parse(data);
+      const isEmailUnique = await UserCollection.findOne({
+        email: data.email,
+      });
+      if (isEmailUnique) {
+        throw { name: "EmailAlreadyExists" };
+      }
+      const updatedUser = await UserCollection.findOneAndUpdate(
+        { _id: new ObjectId(loggedInUser._id) },
+        { $set: data },
+        { returnDocument: "after" },
+      );
+      delete updatedUser.password;
+      return updatedUser;
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 module.exports = User;
