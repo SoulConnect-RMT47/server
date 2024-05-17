@@ -24,6 +24,10 @@ function errorHandler(err, req, res, next) {
       return res.status(401).json({
         message: "Unauthorized",
       });
+      case "InvalidId":
+      return res.status(400).json({
+        message: "Invalid id",
+      });
     default:
       return res.status(500).json({
         message: "Internal server error",
