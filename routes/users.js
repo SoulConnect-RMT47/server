@@ -9,5 +9,6 @@ users.post("/login", UserController.login); // login
 users.use(authentication); // middleware
 
 users.get("/", UserController.getAllUsers); // get all users
+users.put("/", authentication, UserController.updateUser); // update user
 
 module.exports = users;
