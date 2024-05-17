@@ -36,6 +36,7 @@ class UserController {
       next(err);
     }
   }
+
   static async getAllUsers(req, res, next) {
     try {
       const users = await User.findAllUsers(req.user);

@@ -33,7 +33,6 @@ class User {
       let data = input;
       loginSchema.parse(data);
       const user = await UserCollection.findOne({ email: data.email });
-      // console.log("🚀 ~ User ~ loginUser ~ user:", user);
       if (!user) {
         throw { name: "InvalidEmail" };
       }
@@ -82,6 +81,7 @@ class User {
       throw err;
     }
   }
+
 }
 
 module.exports = User;
