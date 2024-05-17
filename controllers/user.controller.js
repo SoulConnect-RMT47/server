@@ -48,6 +48,18 @@ class UserController {
             next(err);
         }
     }
+    static async updateUser(req, res, next) {
+        try {
+            const input = req.body;
+            // console.log("🚀 ~ UserController ~ updateUser ~ input:", input)
+            const loggedInUser = req.user;
+            // console.log("🚀 ~ UserController ~ updateUser ~ loggedInUser:", loggedInUser)
+            const user = await User.updateUserById(loggedInUser, input);
+            res.status(200).json({ message: "User updated", user });
+        } catch (err) {
+            next(err);
+        }
+    }
     static async getUserById(req, res, next) {
         try {
             const { id } = req.params;
