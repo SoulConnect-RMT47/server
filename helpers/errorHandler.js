@@ -11,12 +11,19 @@ function errorHandler(err, req, res, next) {
       return res.status(400).json({
         message: "Email already exists",
       });
-      case "UsernameAlreadyExists":
+    case "UsernameAlreadyExists":
       return res.status(400).json({
         message: "Username already exists",
       });
+    case "InvalidEmail":
+    case "InvalidPassword":
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
     default:
-      return res.status(500).send(err);
+      return res.status(500).json({
+        message: "Internal server error",
+      });
   }
 }
 
