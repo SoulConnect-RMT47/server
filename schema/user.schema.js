@@ -20,4 +20,11 @@ const loginSchema = z.object({
   password: z.string({ message: "Password is required" }).min(5, { message: "Password must be at least 5 characters long" }),
 });
 
-module.exports = { userSchema, loginSchema};
+const updateSchema = z.object({
+  name: z.string({ message: "Please enter a valid name" }).optional(),
+  bio: z.string().optional(),
+  age: z.number({ message: "Age is required" }).min(18, { message: "You must be at least 18 years old" }).optional(),
+  email: z.string({ message: "Email is required" }).email({ message: "Please enter a valid email" }).optional(),
+});
+
+module.exports = { userSchema, loginSchema, updateSchema };
