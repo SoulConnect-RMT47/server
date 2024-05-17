@@ -15,5 +15,9 @@ const userSchema = z.object({
   preference: z.array(z.string()),
 });
 
+const loginSchema = z.object({
+  email: z.string({ message: "Email is required" }).email({ message: "Please enter a valid email" }),
+  password: z.string({ message: "Password is required" }).min(5, { message: "Password must be at least 5 characters long" }),
+});
 
-module.exports = { userSchema};
+module.exports = { userSchema, loginSchema};
