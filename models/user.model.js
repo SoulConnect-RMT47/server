@@ -1,6 +1,7 @@
 const { UserCollection } = require("../connections/collections");
-const { hashPassword } = require("../helpers/bcrypt");
-const { userSchema } = require("../schema/user.schema");
+const { hashPassword, comparePassword } = require("../helpers/bcrypt");
+const { generateToken } = require("../helpers/jwt");
+const { userSchema, loginSchema } = require("../schema/user.schema");
 
 class User {
   static async createUser(input) {
@@ -23,6 +24,25 @@ class User {
       data.password = hashedPassword;
       const user = await UserCollection.insertOne(data);
       return user;
+    } catch (err) {
+      throw err;
+    }
+  }
+  static async loginUser(input) {
+    try {
+      let data = input;
+      loginSchema.parse(data);
+      const user = await UserCollection.findOne({ email: data.email });
+      console.log("🚀 ~ User ~ loginUser ~ user:", user)
+      if (!user) {
+        throw { name: "InvalidEmail" };
+      }
+      const isPasswordMatch = comparePassword(data.password, user.password);
+      if (!isPasswordMatch) {
+        throw { name: "InvalidPassword" };
+      } 
+      const token = generateToken({ userId: user._id, gender: user.gender });
+      return { token };
     } catch (err) {
       throw err;
     }
