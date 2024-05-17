@@ -10,5 +10,6 @@ users.use(authentication); // middleware
 
 users.get("/", UserController.getAllUsers); // get all users
 users.put("/", authentication, UserController.updateUser); // update user
+users.get("/:id", UserController.getUserById); // get all users
 
 module.exports = users;
