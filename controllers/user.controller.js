@@ -69,6 +69,19 @@ class UserController {
             next(err);
         }
     }
+
+    static async swipeUser(req, res, next) {
+        try {
+            const { swipeStatus } = req.body;
+            const { id } = req.params;
+            const { _id } = req.user;
+
+            const swipe = await User.addSwipe(id, _id, swipeStatus);
+            res.status(200).json(swipe);
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 module.exports = UserController;

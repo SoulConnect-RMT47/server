@@ -1,5 +1,9 @@
 const { ObjectId } = require("mongodb");
-const { UserCollection } = require("../connections/collections");
+const {
+    UserCollection,
+    SwipeCollection,
+    ConnectionCollection,
+} = require("../connections/collections");
 const { hashPassword, comparePassword } = require("../helpers/bcrypt");
 const { generateToken } = require("../helpers/jwt");
 const {
@@ -126,6 +130,45 @@ class User {
             );
             // console.log(user, "res user");
             return user;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async addSwipe(id, _id, swipeStatus) {
+        try {
+            console.log(_id, "databody model");
+            const swipe = await SwipeCollection.insertOne({
+                userId: _id,
+                swipedId: new ObjectId(id),
+                swipeStatus,
+            });
+            // console.log(swipe, "swipe mpde;");
+            const findSwipe = await SwipeCollection.findOne({
+                userId: new ObjectId(id),
+                swipedId: _id,
+                swipeStatus: "accepted",
+            });
+
+            if (!findSwipe) {
+                return { message: "Add to swipe has been success" };
+            }
+
+            const findUserGender = await this.getUserById(id);
+
+            if (findUserGender.gender === "Male") {
+                const createConnection = await ConnectionCollection.insertOne({
+                    user1: new ObjectId(id),
+                    user2: new ObjectId(_id),
+                });
+                return { message: "Conratulation !! You're matched" };
+            } else {
+                const createConnection = await ConnectionCollection.insertOne({
+                    user1: new ObjectId(_id),
+                    user2: new ObjectId(id),
+                });
+                return { message: "Conratulation !! You're matched" };
+            }
         } catch (error) {
             throw error;
         }
