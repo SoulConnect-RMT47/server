@@ -33,20 +33,55 @@ class User {
       let data = input;
       loginSchema.parse(data);
       const user = await UserCollection.findOne({ email: data.email });
-      console.log("🚀 ~ User ~ loginUser ~ user:", user)
       if (!user) {
         throw { name: "InvalidEmail" };
       }
       const isPasswordMatch = comparePassword(data.password, user.password);
       if (!isPasswordMatch) {
         throw { name: "InvalidPassword" };
-      } 
+      }
       const token = generateToken({ userId: user._id, gender: user.gender });
       return { token };
     } catch (err) {
       throw err;
     }
   }
+  static async findAllUsers(loggedInUser) {
+    try {
+      const gender = loggedInUser.gender === "Male" ? "Female" : "Male";
+      const matches = await UserCollection.aggregate([
+        {
+          $match: {
+            gender: gender,
+          },
+        },
+        {
+          $addFields: {
+            sharedPreferences: {
+              $size: {
+                $setIntersection: ["$preference", loggedInUser.preference],
+              },
+            },
+          },
+        },
+        {
+          $sort: {
+            sharedPreferences: -1,
+          },
+        },
+        {
+          $project: {
+            password: 0,
+          },
+        },
+      ]).toArray();
+
+      return matches;
+    } catch (err) {
+      throw err;
+    }
+  }
+
 }
 
 module.exports = User;

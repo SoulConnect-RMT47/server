@@ -36,6 +36,15 @@ class UserController {
       next(err);
     }
   }
+
+  static async getAllUsers(req, res, next) {
+    try {
+      const users = await User.findAllUsers(req.user);
+      res.status(200).json(users);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = UserController;

@@ -1,11 +1,13 @@
 const UserController = require("../controllers/user.controller");
+const { authentication } = require("../middleware/authentication");
 
 const users = require("express").Router();
 
-users.get("/", (req, res) => {
-  res.send("ini users");
-});
-users.post("/register", UserController.createUser);
-users.post("/login", UserController.login);
+users.post("/register", UserController.createUser); // register
+users.post("/login", UserController.login); // login
+
+users.use(authentication); // middleware
+
+users.get("/", UserController.getAllUsers); // get all users
 
 module.exports = users;

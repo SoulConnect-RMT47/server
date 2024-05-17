@@ -20,6 +20,10 @@ function errorHandler(err, req, res, next) {
       return res.status(401).json({
         message: "Invalid email or password",
       });
+    case "Unauthorized":
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
     default:
       return res.status(500).json({
         message: "Internal server error",

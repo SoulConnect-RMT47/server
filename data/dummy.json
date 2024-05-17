@@ -9,7 +9,7 @@
     "password": "password123",
     "location": "New York, USA",
     "bio": "Software developer with a passion for coding and technology.",
-    "preference": ["Hiking", "Reading", "Gaming"]
+    "preference": ["Petualang", "Penggemar buku", "Penggemar teknologi", "Intelektual"]
   },
   {
     "name": "Jane Smith",
@@ -21,7 +21,7 @@
     "password": "securePass5",
     "location": "London, UK",
     "bio": "Digital artist and content creator.",
-    "preference": ["Painting", "Traveling", "Cooking"]
+    "preference": ["Seniman seni rupa", "Pelancong", "Foodie", "Penggemar musik"]
   },
   {
     "name": "Alice Johnson",
@@ -32,7 +32,7 @@
     "password": "alicePass123",
     "location": "San Francisco, USA",
     "bio": "Marketing specialist with a love for social media.",
-    "preference": ["Yoga", "Photography"]
+    "preference": ["Intelektual", "Fotografer", "Penggemar teknologi", "Penggemar buku"]
   },
   {
     "name": "Bob Lee",
@@ -44,7 +44,7 @@
     "password": "bobSecure789",
     "location": "Sydney, Australia",
     "bio": "Entrepreneur and startup enthusiast.",
-    "preference": ["Tech", "Startups", "Investing"]
+    "preference": ["Penggemar teknologi", "Gadget guru", "Penggemar buku", "Intelektual"]
   },
   {
     "name": "Emily Davis",
@@ -55,6 +55,66 @@
     "password": "emilyPass456",
     "location": "Toronto, Canada",
     "bio": "College student majoring in computer science.",
-    "preference": ["Programming", "Music", "Movies"]
+    "preference": ["Penggemar teknologi", "Penggemar musik", "Penggemar film", "Pemimpi"]
+  },
+  {
+    "name": "Charlie Brown",
+    "age": 29,
+    "gender": "Male",
+    "imgUrl": "https://example.com/images/charlie.jpg",
+    "username": "charlie_brown29",
+    "email": "charlie.brown@example.com",
+    "password": "charliePass789",
+    "location": "Los Angeles, USA",
+    "bio": "Graphic designer and illustrator.",
+    "preference": ["Seniman", "Penggemar musik", "Penggemar buku"]
+  },
+  {
+    "name": "David Wilson",
+    "age": 26,
+    "gender": "Male",
+    "imgUrl": "https://example.com/images/david.jpg",
+    "username": "david_wilson26",
+    "email": "david.wilson@example.com",
+    "password": "davidPass456",
+    "location": "Vancouver, Canada",
+    "bio": "Data analyst with a love for numbers.",
+    "preference": ["Intelektual", "Penggemar teknologi", "Gadget guru"]
+  },
+  {
+    "name": "Grace Lee",
+    "age": 27,
+    "gender": "Female",
+    "imgUrl": "https://example.com/images/grace.jpg",
+    "username": "grace_lee27",
+    "email": "grace.lee@example.com",
+    "password": "gracePass789",
+    "location": "Melbourne, Australia",
+    "bio": "Travel blogger and photographer.",
+    "preference": ["Pelancong", "Fotografer", "Penggemar film"]
+  },
+  {
+    "name": "Henry Taylor",
+    "age": 24,
+    "gender": "Male",
+    "imgUrl": "https://example.com/images/henry.jpg",
+    "username": "henry_taylor24",
+    "email": "henry.taylor@example.com",
+    "password": "henryPass123",
+    "location": "Boston, USA",
+    "bio": "Mechanical engineer with a love for innovation.",
+    "preference": ["Penggemar teknologi", "Gadget guru", "Petualang"]
+  },
+  {
+    "name": "Isabella Martinez",
+    "age": 23,
+    "gender": "Female",
+    "imgUrl": "https://example.com/images/isabella.jpg",
+    "username": "isabella_martinez23",
+    "email": "isabella.martinez@example.com",
+    "password": "isabellaPass456",
+    "location": "Madrid, Spain",
+    "bio": "Fashion designer and trendsetter.",
+    "preference": ["Pecinta mode", "Penggemar buku", "Seniman"]
   }
 ]
