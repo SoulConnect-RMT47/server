@@ -14,12 +14,12 @@ This file contains the documentation for the server's API endpoints.
 - Request Body: JSON object containing user credentials.
 - Response: JSON object with the logged-in user's details and a token.
 
-3. `GET /users/`:
+3. `GET /users`:
 
 - Description: Retrieves a list of all users.
 - Response: JSON array containing user objects.
 
-4. `PUT /users/`:
+4. `PUT /users`:
 
 - Description: Updates a user's information.
 - Request Body: JSON object containing the updated user information.
@@ -37,6 +37,11 @@ This file contains the documentation for the server's API endpoints.
 - Description: Retrieves a user's details by ID.
 - Parameters: `id` - The ID of the user to retrieve.
 - Response: JSON object with the user's details.
+
+7. `GET /connections`:
+
+- Description: Retrieves a connection's details by user.
+- Response: JSON object with the connection's details.
 
 ## POST /users/register
 
@@ -121,7 +126,7 @@ This file contains the documentation for the server's API endpoints.
 }
 ```
 
-## GET /users/
+## GET /users
 
 ### Request
 
@@ -167,7 +172,7 @@ This file contains the documentation for the server's API endpoints.
 }
 ```
 
-## PUT /users/
+## PUT /users
 
 ### Request
 
@@ -334,6 +339,44 @@ OR
 }
 ```
 
+## GET /connections
+### Request
+- Headers
+
+```json
+{
+  "Authorization": "bearer <token>"
+}
+```
+### Response
+- 200 OK
+```json
+[
+    {
+        "_id": "664758307129b8b8798ad2fd",
+        "name": "Padila",
+        "age": 25,
+        "gender": "Female",
+        "imgUrl": "https://example.com/images/john.jpg",
+        "username": "Padila",
+        "email": "padila@example.com",
+        "location": "New York, USA",
+        "bio": "Software developer with a passion for coding and technology.",
+        "preference": [
+            "Petualang",
+            "Penggemar buku",
+            "Penggemar teknologi",
+            "Intelektual"
+        ]
+    }...
+]
+```
+- 401
+```json
+{
+    "message": "Unauthorized"
+}
+```
 
 ## Universal Error
 
