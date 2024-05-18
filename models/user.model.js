@@ -24,7 +24,7 @@ class User {
       }
       const hashedPassword = hashPassword(data.password);
       data.password = hashedPassword;
-      const user = await UserCollection.insertOne(data);
+      const user = await UserCollection.insertOne(data, { returnDocument: "after" });
       return user;
     } catch (err) {
       throw err;
@@ -46,7 +46,8 @@ class User {
         userId: user._id,
         gender: user.gender,
       });
-      return { token };
+      delete user.password;
+      return { token, user };
     } catch (err) {
       throw err;
     }
