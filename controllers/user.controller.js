@@ -35,6 +35,7 @@ class UserController {
       res.status(200).json({
         message: "Login successful",
         token: user.token,
+        user: user.user,
       });
     } catch (err) {
       next(err);
