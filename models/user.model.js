@@ -124,7 +124,9 @@ class User {
   static async getUserById(id) {
     try {
       const user = await UserCollection.findOne({ _id: new ObjectId(id) }, { projection: { password: 0 } });
-      // console.log(user, "res user");
+      if (!user) {
+        throw { name: "UserNotFound" };
+      }
       return user;
     } catch (error) {
       throw error;
@@ -134,7 +136,7 @@ class User {
   static async addSwipe(id, _id, swipeStatus) {
     try {
       swipeSchema.parse({ id, _id, swipeStatus });
-      console.log(_id, "databody model");
+      // console.log(_id, "databody model");
       const swipe = await SwipeCollection.insertOne({
         userId: _id,
         swipedId: new ObjectId(id),
@@ -158,13 +160,13 @@ class User {
           user1: new ObjectId(id),
           user2: new ObjectId(_id),
         });
-        return { message: "Conratulation !! You're matched" };
+        return { message: "Congratulations!! You're matched" };
       } else {
         const createConnection = await ConnectionCollection.insertOne({
           user1: new ObjectId(_id),
           user2: new ObjectId(id),
         });
-        return { message: "Conratulation !! You're matched" };
+        return { message: "Congratulations!! You're matched" };
       }
     } catch (error) {
       throw error;
