@@ -105,8 +105,24 @@ This file contains the documentation for the server's API endpoints.
 
 ```json
 {
-  "message": "Login successful",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjQ3MDkzNTNlMTY2NjBjYThiMjZhMmQiLCJnZW5kZXIiOiJNYWxlIiwiaWF0IjoxNzE1OTMxNzA4fQ.gw2EQNyMSnIUr0Vcu3Fo0wW-lZlJN6NGhbnFcDiqVqo"
+    "message": "Login successful",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjQ4OTU2Y2E5YzUwY2IxYjhjYzRlNzgiLCJnZW5kZXIiOiJNYWxlIiwiaWF0IjoxNzE2MDQ1Mzc0fQ.kLCwapM4mwEFf6CBJxxZ1_QUqjWzUgltYaiMkb0N9ec",
+    "user": {
+        "_id": "6648956ca9c50cb1b8cc4e78",
+        "name": "John Doe",
+        "age": 25,
+        "gender": "Male",
+        "imgUrl": "https://example.com/images/john.jpg",
+        "username": "john_doe256",
+        "email": "john.doe@mail.com",
+        "location": "New York, USA",
+        "bio": "Software developer with a passion for coding and technology.",
+        "preference": [
+            "Hiking",
+            "Reading",
+            "Gaming"
+        ]
+    }
 }
 ```
 
