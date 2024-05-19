@@ -41,7 +41,6 @@ class Connection {
             $unwind: "$user2",
         },
     ]).toArray();
-    console.log("🚀 ~ Connection ~ findAllConnecntion ~ connections:", connections)
 
     const result = connections.map((connection) => {
         const user = type === "user1" ? connection.user2 : connection.user1;
