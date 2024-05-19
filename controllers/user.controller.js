@@ -76,9 +76,9 @@ class UserController {
     try {
       const { swipeStatus } = req.body;
       const { id } = req.params;
-      const { _id } = req.user;
+      const loggedInUser = req.user;
 
-      const swipe = await User.addSwipe(id, _id, swipeStatus);
+      const swipe = await User.addSwipe(id, loggedInUser, swipeStatus);
       res.status(200).json(swipe);
     } catch (err) {
       next(err);

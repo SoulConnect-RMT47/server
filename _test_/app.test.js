@@ -286,7 +286,7 @@ describe("App", () => {
       expect(response.statusCode).toBe(400);
       expect(response.body).toHaveProperty("message", "Password must be at least 5 characters long");
     });
-    it("password is invalid short should respond with 200 status code for POST /users/login", async () => {
+    it("password is invalid should respond with 200 status code for POST /users/login", async () => {
       const response = await request(app).post("/users/login").send({
         email: "john.doe@example.com",
         password: "password1234",

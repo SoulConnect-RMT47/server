@@ -4,6 +4,8 @@ const { hashPassword, comparePassword } = require("../helpers/bcrypt");
 const { generateToken } = require("../helpers/jwt");
 const { userSchema, loginSchema, updateSchema } = require("../schema/user.schema");
 const { swipeSchema } = require("../schema/swipe.schema");
+const firebaseDB = require("../connections/firebase");
+const { collection, addDoc } = require("firebase/firestore");
 
 class User {
   static async createUser(input) {
@@ -134,8 +136,9 @@ class User {
     }
   }
 
-  static async addSwipe(id, _id, swipeStatus) {
+  static async addSwipe(id, loggedInUser, swipeStatus) {
     try {
+      const { _id } = loggedInUser;
       swipeSchema.parse({ id, _id, swipeStatus });
       // console.log(_id, "databody model");
       const swipe = await SwipeCollection.insertOne({
@@ -154,21 +157,19 @@ class User {
         return { message: "Add to swipe has been success" };
       }
 
-      const findUserGender = await this.getUserById(id);
-
-      if (findUserGender.gender === "Male") {
-        const createConnection = await ConnectionCollection.insertOne({
-          user1: new ObjectId(id),
-          user2: new ObjectId(_id),
-        });
-        return { message: "Congratulations!! You're matched" };
-      } else {
-        const createConnection = await ConnectionCollection.insertOne({
-          user1: new ObjectId(_id),
-          user2: new ObjectId(id),
-        });
-        return { message: "Congratulations!! You're matched" };
-      }
+      const user = await this.getUserById(id);
+      const gender = user.gender
+      const messageID = await addDoc(collection(firebaseDB, "messages"), {
+        user1ID: gender === "Male" ? user.username : loggedInUser.username,
+        user2ID: gender === "Male" ? loggedInUser.username : user.username,
+        conversations: [],
+      });
+      const createConnection = await ConnectionCollection.insertOne({
+        user1: gender === "Male" ? new ObjectId(id) : new ObjectId(_id),
+        user2: gender === "Male" ? new ObjectId(_id) : new ObjectId(id),
+        messageID: messageID.id,
+      });
+      return { message: "Congratulations!! You're matched", createConnection };
     } catch (error) {
       throw error;
     }
