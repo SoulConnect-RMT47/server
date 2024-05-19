@@ -1,0 +1,12 @@
+[{
+  "_id": "664758cf01cafe27a201c778",
+  "userId": "6647156bd5c41787de68a340",
+  "swipedId": "664758307129b8b8798ad2fd",
+  "swipeStatus": "accepted"
+},
+{
+  "_id": "6647590401cafe27a201c779",
+  "userId": "664758307129b8b8798ad2fd",
+  "swipedId": "6647156bd5c41787de68a340",
+  "swipeStatus": "accepted"
+}]
