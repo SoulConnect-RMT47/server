@@ -112,7 +112,7 @@ class User {
       const isEmailUnique = await UserCollection.findOne({
         email: data.email,
       });
-      if (isEmailUnique) {
+      if (isEmailUnique && isEmailUnique.email !== loggedInUser.email) {
         throw { name: "EmailAlreadyExists" };
       }
       const updatedUser = await UserCollection.findOneAndUpdate({ _id: new ObjectId(loggedInUser._id) }, { $set: data }, { returnDocument: "after" });
