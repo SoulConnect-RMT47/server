@@ -4,7 +4,7 @@ const users = require("./users");
 const router = require("express").Router();
 
 router.get("/", (req, res) => {
-  res.send("SoulConnect API is running!");
+  res.status(200).json({ message: "Connected!" });
 });
 
 router.use("/users", users)
