@@ -12,7 +12,7 @@ const userSchema = z.object({
   password: z.string({ message: "Password is required" }).min(5, { message: "Password must be at least 5 characters long" }),
   location: z.string().optional(),
   bio: z.string().optional(),
-  preference: z.array(z.string()),
+  preference: z.array({ message: "Preference is required" })
 });
 
 const loginSchema = z.object({
