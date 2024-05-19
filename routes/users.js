@@ -14,7 +14,7 @@ users.use(authentication); // middleware
 
 users.get("/", UserController.getAllUsers); // get all users
 users.put("/", UserController.updateUser); // update user
-users.post("/swipe/:id", UserController.swipeUser); // swipe user
+// users.post("/swipe/:id", UserController.swipeUser); // swipe user
 users.get("/:id", UserController.getUserById); // get by id
 
 module.exports = users;

@@ -3,9 +3,6 @@ const { UserCollection, SwipeCollection, ConnectionCollection } = require("../co
 const { hashPassword, comparePassword } = require("../helpers/bcrypt");
 const { generateToken } = require("../helpers/jwt");
 const { userSchema, loginSchema, updateSchema } = require("../schema/user.schema");
-const { swipeSchema } = require("../schema/swipe.schema");
-const firebaseDB = require("../connections/firebase");
-const { collection, addDoc } = require("firebase/firestore");
 
 class User {
   static async createUser(input) {
@@ -131,45 +128,6 @@ class User {
         throw { name: "UserNotFound" };
       }
       return user;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async addSwipe(id, loggedInUser, swipeStatus) {
-    try {
-      const { _id } = loggedInUser;
-      swipeSchema.parse({ id, _id, swipeStatus });
-      // console.log(_id, "databody model");
-      const swipe = await SwipeCollection.insertOne({
-        userId: _id,
-        swipedId: new ObjectId(id),
-        swipeStatus,
-      });
-      // console.log(swipe, "swipe mpde;");
-      const findSwipe = await SwipeCollection.findOne({
-        userId: new ObjectId(id),
-        swipedId: _id,
-        swipeStatus: "accepted",
-      });
-
-      if (!findSwipe) {
-        return { message: "Add to swipe has been success" };
-      }
-
-      const user = await this.getUserById(id);
-      const gender = user.gender
-      const messageID = await addDoc(collection(firebaseDB, "messages"), {
-        user1ID: gender === "Male" ? user.username : loggedInUser.username,
-        user2ID: gender === "Male" ? loggedInUser.username : user.username,
-        conversations: [],
-      });
-      const createConnection = await ConnectionCollection.insertOne({
-        user1: gender === "Male" ? new ObjectId(id) : new ObjectId(_id),
-        user2: gender === "Male" ? new ObjectId(_id) : new ObjectId(id),
-        messageID: messageID.id,
-      });
-      return { message: "Congratulations!! You're matched", createConnection };
     } catch (error) {
       throw error;
     }

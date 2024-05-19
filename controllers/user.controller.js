@@ -71,19 +71,6 @@ class UserController {
       next(err);
     }
   }
-
-  static async swipeUser(req, res, next) {
-    try {
-      const { swipeStatus } = req.body;
-      const { id } = req.params;
-      const loggedInUser = req.user;
-
-      const swipe = await User.addSwipe(id, loggedInUser, swipeStatus);
-      res.status(200).json(swipe);
-    } catch (err) {
-      next(err);
-    }
-  }
 }
 
 module.exports = UserController;
