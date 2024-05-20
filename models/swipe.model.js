@@ -12,6 +12,7 @@ class Swipe {
         {
           $match: {
             userId: new ObjectId(user._id),
+            swipeStatus: "accepted",
           },
         },
         {
