@@ -30,7 +30,6 @@ class UserController {
   static async login(req, res, next) {
     try {
       const input = req.body;
-      // console.log("🚀 ~ UserController ~ login ~ input:", input)
       const user = await User.loginUser(input);
       res.status(200).json({
         message: "Login successful",

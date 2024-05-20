@@ -1,12 +1,14 @@
 const request = require("supertest");
 const { app, port } = require("../app");
 const { UserCollection, SwipeCollection, ConnectionCollection } = require("../connections/collections");
-const { client, database } = require("../connections/mongodb");
+const { client } = require("../connections/mongodb");
 
 describe("App", () => {
   let server;
-  let tokenJohnDoe = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjQ5YjJmNWI0ZTY4ZGE4ZTJhYTFkMmUiLCJnZW5kZXIiOiJNYWxlIiwiaWF0IjoxNzE2MTA1OTczfQ.Ie-_q5G9YcM06lv4ia2JXJuh0WxoZT84TGIjUAjbdsE";
-  let tokenJaneSmith ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjQ5YjJmNWI0ZTY4ZGE4ZTJhYTFkMmUiLCJnZW5kZXIiOiJNYWxlIiwiaWF0IjoxNzE2MTA1OTczfQ.Ie-_q5G9YcM06lv4ia2JXJuh0WxoZT84TGIjUAjbdsE"
+  let token;
+  let token2;
+  let user;
+  let user2;
 
   const seedData = async () => {
     await UserCollection.insertMany(require("../data/testing/test.users.json"));
@@ -194,20 +196,18 @@ describe("App", () => {
       expect(response.body).toHaveProperty("message", "Password is required");
     });
     it("preference is not selected should respond with 400 status code for POST /users/register", async () => {
-      const response = await request(app)
-        .post("/users/register")
-        .send({
-          name: "John Doe",
-          age: 18,
-          gender: "Male",
-          imgUrl: "https://example.com/images/john.jpg",
-          username: "john_doe25",
-          email: "john.doe1@example.com",
-          password: "password123",
-          location: "New York, USA",
-          bio: "Software developer with a passion for coding and technology.",
-          preference: [],
-        });
+      const response = await request(app).post("/users/register").send({
+        name: "John Doe",
+        age: 18,
+        gender: "Male",
+        imgUrl: "https://example.com/images/john.jpg",
+        username: "john_doe25",
+        email: "john.doe1@example.com",
+        password: "password123",
+        location: "New York, USA",
+        bio: "Software developer with a passion for coding and technology.",
+        preference: [],
+      });
       expect(response.statusCode).toBe(400);
       expect(response.body).toHaveProperty("message", "Please select at least one preference");
     });
@@ -241,24 +241,32 @@ describe("App", () => {
       expect(response.body).toHaveProperty("message", "Login successful");
       expect(response.body).toHaveProperty("token");
       expect(response.body).toHaveProperty("user");
+      token = response.body.token;
+    });
+    it("should respond with 200 status code for POST /users/login", async () => {
+      const response = await request(app).post("/users/login").send({
+        email: "john.doe@example.com",
+        password: "password123",
+      });
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toHaveProperty("message", "Login successful");
+      expect(response.body).toHaveProperty("token");
+      expect(response.body).toHaveProperty("user");
+      token2 = response.body.token;
     });
     it("email is empty should respond with 400 status code for POST /users/login", async () => {
-      const response = await request(app)
-        .post("/users/login")
-        .send({
-          email: "",
-          password: "password123",
-        });
+      const response = await request(app).post("/users/login").send({
+        email: "",
+        password: "password123",
+      });
       expect(response.statusCode).toBe(400);
       expect(response.body).toHaveProperty("message", "Please enter a valid email");
     });
     it("email is null should respond with 400 status code for POST /users/login", async () => {
-      const response = await request(app)
-        .post("/users/login")
-        .send({
-          email: null,
-          password: "password123",
-        });
+      const response = await request(app).post("/users/login").send({
+        email: null,
+        password: "password123",
+      });
       expect(response.statusCode).toBe(400);
       expect(response.body).toHaveProperty("message", "Email is required");
     });
@@ -294,11 +302,243 @@ describe("App", () => {
       expect(response.statusCode).toBe(401);
       expect(response.body).toHaveProperty("message", "Invalid email or password");
     });
-
-
   });
 
-  
+  describe("GET /users", () => {
+    it("should respond with 200 status code for GET /users", async () => {
+      const response = await request(app)
+        .get("/users")
+        .set({
+          authorization: `Bearer ${token}`,
+        });
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toBeInstanceOf(Array);
+      user = response.body[1];
+    });
+    it("should respond with 200 status code for GET /users", async () => {
+      const response = await request(app)
+        .get("/users")
+        .set({
+          authorization: `Bearer ${token2}`,
+        });
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toBeInstanceOf(Array);
+      user2 = response.body[1];
+    });
+    it("should respond with 401 status code for GET /users", async () => {
+      const response = await request(app).get("/users");
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toHaveProperty("message", "Unauthorized");
+    });
+  });
 
-  // Add more test cases as needed
+  describe("GET /users/:id", () => {
+    it("should respond with 200 status code for GET /users/:id", async () => {
+      const response = await request(app)
+        .get(`/users/${user._id}`)
+        .set({
+          authorization: `Bearer ${token}`,
+        });
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toHaveProperty("name", "John Doe");
+    });
+    it("should respond with 200 status code for GET /users/:id", async () => {
+      const response = await request(app)
+        .get(`/users/${user2._id}`)
+        .set({
+          authorization: `Bearer ${token2}`,
+        });
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toHaveProperty("name", "Alice Johnson");
+    });
+    it("should respond with 404 status code for GET /users/:id", async () => {
+      const response = await request(app)
+        .get(`/users/664758307129b8b8798ad2fd`)
+        .set({
+          authorization: `Bearer ${token}`,
+        });
+      expect(response.statusCode).toBe(404);
+      expect(response.body).toHaveProperty("message", "User not found");
+    });
+    it("should respond with 404 status code for GET /users/:id", async () => {
+      const response = await request(app)
+        .get(`/users/664758307129b8b8798ad2f`)
+        .set({
+          authorization: `Bearer ${token}`,
+        });
+      expect(response.statusCode).toBe(404);
+      expect(response.body).toHaveProperty("message", "User not found");
+    });
+    it("should respond with 401 status code for GET /users/:id", async () => {
+      const response = await request(app).get(`/users/${user._id}`);
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toHaveProperty("message", "Unauthorized");
+    });
+  });
+
+  describe("PUT /users", () => {
+    it("should respond with 200 status code for PUT /users", async () => {
+      const response = await request(app)
+        .put("/users")
+        .send({
+          name: "jhon die",
+          bio: "namaku jhon die",
+          age: 18,
+          email: "jhon_die@example.com",
+        })
+        .set({
+          authorization: `Bearer ${token}`,
+        });
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toHaveProperty("message", "User updated");
+      expect(response.body).toHaveProperty("user");
+    });
+    it("should respond with 401 status code for PUT /users", async () => {
+      const response = await request(app)
+        .put("/users")
+        .send({
+          name: "jhon die",
+          bio: "namaku jhon die",
+          age: 17,
+          email: "padila1@example.com",
+        })
+        .set({
+          authorization: `Bearer ${token}1`,
+        });
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toHaveProperty("message", "Unauthorized");
+    });
+    it("should respond with 400 status code for PUT /users", async () => {
+      const response = await request(app)
+        .put("/users")
+        .send({
+          name: "jhon die",
+          bio: "namaku jhon die",
+          age: 18,
+          email: "padila1@example.com",
+        })
+        .set({
+          authorization: `Bearer ${token}`,
+        });
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toHaveProperty("message", "Email already exists");
+    });
+    it("should respond with 400 status code for PUT /users", async () => {
+      const response = await request(app)
+        .put("/users")
+        .send({
+          name: "jhon die",
+          bio: "namaku jhon die",
+          age: 17,
+          email: "padila1@example.com",
+        })
+        .set({
+          authorization: `Bearer ${token}`,
+        });
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toHaveProperty("message", "You must be at least 18 years old");
+    });
+  });
+
+  describe("GET /swipe", () => {
+    it("should respond with 200 status code for GET /swipe", async () => {
+      const response = await request(app)
+        .get("/swipe")
+        .set({
+          authorization: `Bearer ${token}`,
+        });
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toBeInstanceOf(Array);
+    });
+    it("should respond with 401 status code for GET /swipe", async () => {
+      const response = await request(app).get("/swipe");
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toHaveProperty("message", "Unauthorized");
+    });
+  });
+
+  describe("POST /swipe/:id", () => {
+    it("should respond with 200 status code for POST /swipe/:id", async () => {
+      const response = await request(app)
+        .post(`/swipe/${user2._id}`)
+        .send({
+          swipeStatus: "accepted",
+        })
+        .set({
+          authorization: `Bearer ${token}`,
+        });
+      expect(response.statusCode).toBe(200);
+    });
+    it("should respond with 200 status code for POST /swipe/:id", async () => {
+      const response = await request(app)
+        .post(`/swipe/${user._id}`)
+        .send({
+          swipeStatus: "accepted",
+        })
+        .set({
+          authorization: `Bearer ${token2}`,
+        });
+      expect(response.statusCode).toBe(200);
+    });
+    it("should respond with 200 status code for POST /swipe/:id", async () => {
+      const response = await request(app)
+        .post(`/swipe/${user._id}`)
+        .send({
+          swipeStatus: "rejected",
+        })
+        .set({
+          authorization: `Bearer ${token2}`,
+        });
+      expect(response.statusCode).toBe(200);
+    });
+    it("should respond with 400 status code for POST /swipe/:id", async () => {
+      const response = await request(app)
+        .post(`/swipe/${user._id}`)
+        .send({
+          swipeStatus: "",
+        })
+        .set({
+          authorization: `Bearer ${token2}`,
+        });
+      expect(response.statusCode).toBe(400);
+    });
+    it("should respond with 401 status code for POST /swipe/:id", async () => {
+      const response = await request(app).post(`/swipe/${user2._id}`).send({
+        swipeStatus: "accepted",
+      });
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toHaveProperty("message", "Unauthorized");
+    });
+    it("should respond with 404 status code for POST /swipe/:id", async () => {
+      const response = await request(app)
+        .post(`/swipe/664758307129b8b8798ad2f`)
+        .send({
+          swipeStatus: "accepted",
+        })
+        .set({authorization: `Bearer ${token}`});
+      expect(response.statusCode).toBe(404);
+      expect(response.body).toHaveProperty("message", "User not found");
+    });
+  });
+  
+  describe("GET /connections", () => {
+    it("should respond with 200 status code for GET /connections", async () => {
+      const response = await request(app)
+        .get("/connections")
+        .set({
+          authorization: `Bearer ${token}`,
+        });
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toBeInstanceOf(Array);
+    });
+    it("should respond with 401 status code for GET /connections", async () => {
+      const response = await request(app)
+        .get("/connections")
+        .set({
+          authorization: `Bearer${token}`,
+        });
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toHaveProperty("message", "Unauthorized");
+    });
+  });
 });

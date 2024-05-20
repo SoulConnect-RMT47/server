@@ -12,6 +12,7 @@ class Swipe {
         {
           $match: {
             userId: new ObjectId(user._id),
+            swipeStatus: "accepted",
           },
         },
         {
@@ -40,19 +41,14 @@ class Swipe {
     }
   }
   static async addSwipe(id, loggedInUser, swipeStatus) {
-    console.log("🚀 ~ Swipe ~ addSwipe ~ swipeStatus:", swipeStatus)
-    console.log("🚀 ~ Swipe ~ addSwipe ~ loggedInUser:", loggedInUser)
-    console.log("🚀 ~ Swipe ~ addSwipe ~ id:", id)
     try {
       const { _id } = loggedInUser;
       swipeSchema.parse({ id, _id, swipeStatus });
-      // console.log(_id, "databody model");
       const swipe = await SwipeCollection.insertOne({
         userId: _id,
         swipedId: new ObjectId(id),
         swipeStatus,
       });
-      // console.log(swipe, "swipe mpde;");
       const findSwipe = await SwipeCollection.findOne({
         userId: new ObjectId(id),
         swipedId: _id,
@@ -64,7 +60,6 @@ class Swipe {
       }
 
       const user = await User.getUserById(id);
-      console.log("🚀 ~ Swipe ~ addSwipe ~ user:", user)
       const gender = user.gender;
       const messageID = await addDoc(collection(firebaseDB, "messages"), {
         user1ID: gender === "Male" ? user.username : loggedInUser.username,

@@ -103,10 +103,8 @@ class User {
   }
 
   static async updateUserById(loggedInUser, input) {
-    // console.log("🚀 ~ User ~ updateUser ~ loggedInUser:", loggedInUser)
     try {
       let data = input;
-      // console.log("🚀 ~ User ~ updateUser ~ data:", data)
       updateSchema.parse(data);
       const isEmailUnique = await UserCollection.findOne({
         email: data.email,
