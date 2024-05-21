@@ -25,20 +25,24 @@ This file contains the documentation for the server's API endpoints.
 - Request Body: JSON object containing the updated user information.
 - Response: JSON object with the updated user's details.
 
-5. `POST /users/swipe/:id`:
+5. `GET /users/:id`:
+
+- Description: Retrieves a user's details by ID.
+- Parameters: `id` - The ID of the user to retrieve.
+- Response: JSON object with the user's details.
+
+6. `POST /swipe/:id`:
 
 - Description: Performs a swipe action on a user.
 - Parameters: `id` - The ID of the user to swipe on.
 - Request Body: JSON object containing swipe information.
 - Response: JSON object with the result of the swipe action.
 
-6. `GET /users/:id`:
+7. `GET /swipe`:
+- Description: Retrive swipped user that accepted.
+- Response: JSON object with the all swiped user.
 
-- Description: Retrieves a user's details by ID.
-- Parameters: `id` - The ID of the user to retrieve.
-- Response: JSON object with the user's details.
-
-7. `GET /connections`:
+8. `GET /connections`:
 
 - Description: Retrieves a connection's details by user.
 - Response: JSON object with the connection's details.
@@ -51,17 +55,18 @@ This file contains the documentation for the server's API endpoints.
 
 ```json
 {
-  "name": "John Doe",
-  "age": 25,
-  "gender": "Male",
-  "imgUrl": "https://example.com/images/john.jpg",
-  "username": "john_doe25",
-  "email": "john.doe@example.com",
-  "password": "password123",
-  "location": "New York, USA",
-  "bio": "Software developer with a passion for coding and technology.",
-  "preference": ["Hiking", "Reading", "Gaming"]
+  "name": "<string>",
+  "age": "<number>",
+  "gender": "<string>",
+  "imgUrl": "<string>",
+  "username": "<string>",
+  "email": "<string>",
+  "password": "<string>",
+  "location": "<string>",
+  "bio": "<string>",
+  "preference": ["<string>"...] //max 5 preference
 }
+
 ```
 
 ### Response
@@ -73,7 +78,7 @@ This file contains the documentation for the server's API endpoints.
   "message": "User created",
   "user": {
     "acknowledged": true,
-    "insertedId": "664705d39136c20de415396d"
+    "insertedId": <string>
   }
 }
 ```
@@ -82,7 +87,7 @@ This file contains the documentation for the server's API endpoints.
 
 ```json
 {
-  "message": "Age is required"
+  "message": <string>
 }
 ```
 
@@ -94,8 +99,8 @@ This file contains the documentation for the server's API endpoints.
 
 ```json
 {
-  "email": "john.doe@example.com",
-  "password": "password123"
+  "email": <string>,
+  "password": <string>
 }
 ```
 
@@ -106,21 +111,21 @@ This file contains the documentation for the server's API endpoints.
 ```json
 {
     "message": "Login successful",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjQ4OTU2Y2E5YzUwY2IxYjhjYzRlNzgiLCJnZW5kZXIiOiJNYWxlIiwiaWF0IjoxNzE2MDQ1Mzc0fQ.kLCwapM4mwEFf6CBJxxZ1_QUqjWzUgltYaiMkb0N9ec",
+    "token": <string>,
     "user": {
-        "_id": "6648956ca9c50cb1b8cc4e78",
-        "name": "John Doe",
-        "age": 25,
-        "gender": "Male",
-        "imgUrl": "https://example.com/images/john.jpg",
-        "username": "john_doe256",
-        "email": "john.doe@mail.com",
-        "location": "New York, USA",
-        "bio": "Software developer with a passion for coding and technology.",
+        "_id": <ObjectId>,
+        "name": <string>,
+        "age": <number>,
+        "gender": <string>,
+        "imgUrl": <string>,
+        "username": <string>,
+        "email": <string>,
+        "location": <string>,
+        "bio": <string>,
         "preference": [
-            "Hiking",
-            "Reading",
-            "Gaming"
+            <string>,
+            <string>,
+            <string>
         ]
     }
 }
@@ -130,7 +135,7 @@ This file contains the documentation for the server's API endpoints.
 
 ```json
 {
-  "message": "Password must be at least 5 characters long"
+  "message": <string>
 }
 ```
 
@@ -160,23 +165,23 @@ This file contains the documentation for the server's API endpoints.
 
 ```json
 [
-    {
-        "_id": "6647156bd5c41787de68a349",
-        "name": "Isabella Martinez",
-        "age": 23,
-        "gender": "Female",
-        "imgUrl": "https://example.com/images/isabella.jpg",
-        "username": "isabella_martinez23",
-        "email": "isabella.martinez@example.com",
-        "location": "Madrid, Spain",
-        "bio": "Fashion designer and trendsetter.",
-        "preference": [
-            "Pecinta mode",
-            "Penggemar buku",
-            "Seniman"
-        ],
-        "sharedPreferences": 1
-    },...
+   {
+    "_id": "<string>",
+    "name": "<string>",
+    "age": "<number>",
+    "gender": "<string>",
+    "imgUrl": "<string>",
+    "username": "<string>",
+    "email": "<string>",
+    "location": "<string>",
+    "bio": "<string>",
+    "preference": [
+        "<string>",
+        "<string>",
+        "<string>"
+    ],
+    "sharedPreferences": "<number>"
+    }...
 ]
 ```
 
@@ -204,10 +209,10 @@ This file contains the documentation for the server's API endpoints.
 
 ```json
 {
-  "name": "jhon ganteng", //optional
-  "bio": "Suka janda muda", //optional
-  "age": 18, //optional
-  "email": "jhonganteng@example.com" //optional
+  "name": <string>, //optional
+  "bio": <string>, //optional
+  "age": <number>, //optional
+  "email": <string> //optional
 }
 ```
 
@@ -219,17 +224,21 @@ This file contains the documentation for the server's API endpoints.
 {
   "message": "User updated",
   "user": {
-    "_id": "6647156bd5c41787de68a340",
-    "name": "jhon ganteng",
-    "age": 18,
-    "gender": "Male",
-    "imgUrl": "https://example.com/images/john.jpg",
-    "username": "john_doe25",
-    "email": "jhonganteng1@example.com",
-    "location": "New York, USA",
-    "bio": "Suka janda muda",
-    "preference": ["Petualang", "Penggemar buku", "Penggemar teknologi", "Intelektual"]
-  }
+        "_id": <ObjectId>,
+        "name": <string>,
+        "age": <number>,
+        "gender": <string>,
+        "imgUrl": <string>,
+        "username": <string>,
+        "email": <string>,
+        "location": <string>,
+        "bio": <string>,
+        "preference": [
+            <string>,
+            <string>,
+            <string>
+        ]
+    }
 }
 ```
 
@@ -237,11 +246,69 @@ This file contains the documentation for the server's API endpoints.
 
 ```json
 {
-  "message": "You must be at least 18 years old"
+  "message": <string>
 }
 ```
 
 - 401 Unauthorized
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+## GET /users/:id
+
+### Request
+
+- Headers
+
+```json
+{
+  "Authorization": "bearer <token>"
+}
+```
+
+- Params
+
+```json
+{
+  "id": "<string>"
+}
+```
+
+### Response
+
+- 200 OK
+
+```json
+{
+    "_id": <ObjectId>,
+    "name": <string>,
+    "age": <number>,
+    "gender": <string>,
+    "imgUrl": <string>,
+    "username": <string>,
+    "email": <string>,
+    "location": <string>,
+    "bio": <string>,
+    "preference": [
+        <string>,
+        <string>,
+        <string>
+    ]
+}
+```
+
+- 404 Not Found
+
+```json
+{
+  "message": "User not found"
+}
+```
+
+- 401
 
 ```json
 {
@@ -265,13 +332,15 @@ This file contains the documentation for the server's API endpoints.
 
 ```json
 {
-  "id" : "<string>"
+  "id": "<string>"
 }
 ```
+
 - Body
+
 ```json
 {
-    "swipeStatus": "accepted"
+  "swipeStatus": "accepted" || "rejected"
 }
 ```
 
@@ -289,16 +358,17 @@ OR
 
 ```json
 {
-  "message": "Add to swipe has been success" 
+  "message": "Add to swipe has been success"
 }
 ```
 
 - 400 Bad Request
+
 ```json
 {
-    "message": "Invalid swipe status"
+  "message": "Invalid swipe status"
 }
-````
+```
 
 - 401 Unauthorized
 
@@ -307,55 +377,7 @@ OR
   "message": "Unauthorized"
 }
 ```
-## GET /users/:id
-### Request
-- Headers
-
-```json
-{
-  "Authorization": "bearer <token>"
-}
-```
-- Params
-```json
-{
-  "id" : "<string>"
-}
-```
-### Response
-- 200 OK
-```json
-{
-    "_id": "6647156bd5c41787de68a344",
-    "name": "Emily Davis",
-    "age": 22,
-    "gender": "Female",
-    "username": "emily_davis22",
-    "email": "emily.davis@example.com",
-    "location": "Toronto, Canada",
-    "bio": "College student majoring in computer science.",
-    "preference": [
-        "Penggemar teknologi",
-        "Penggemar musik",
-        "Penggemar film",
-        "Pemimpi"
-    ]
-}
-```
-- 404 Not Found
-```json
-{
-    "message": "User not found"
-}
-```
-- 401
-```json
-{
-    "message": "Unauthorized"
-}
-```
-
-## GET /connections
+## GET /swipe
 ### Request
 - Headers
 
@@ -369,28 +391,80 @@ OR
 ```json
 [
     {
-        "_id": "664758307129b8b8798ad2fd",
-        "name": "Padila",
-        "age": 25,
-        "gender": "Female",
-        "imgUrl": "https://example.com/images/john.jpg",
-        "username": "Padila",
-        "email": "padila@example.com",
-        "location": "New York, USA",
-        "bio": "Software developer with a passion for coding and technology.",
-        "preference": [
-            "Petualang",
-            "Penggemar buku",
-            "Penggemar teknologi",
-            "Intelektual"
-        ]
+        "_id": "664ac7bf45e26f35b404ca28",
+        "userId": "6649735baa788e131c8278fb",
+        "swipedId": "664ac22c45e26f35b404ca21",
+        "swipeStatus": "accepted",
+        "swipedUser":{
+            "_id": <ObjectId>,
+            "name": <string>,
+            "age": <number>,
+            "gender": <string>,
+            "imgUrl": <string>,
+            "username": <string>,
+            "email": <string>,
+            "location": <string>,
+            "bio": <string>,
+            "preference": [
+                <string>,
+                <string>,
+                <string>
+            ]
+        }
     }...
 ]
 ```
-- 401
+- 401 Unauthorized
+
 ```json
 {
-    "message": "Unauthorized"
+  "message": "Unauthorized"
+}
+```
+
+## GET /connections
+
+### Request
+
+- Headers
+
+```json
+{
+  "Authorization": "bearer <token>"
+}
+```
+
+### Response
+
+- 200 OK
+
+```json
+[
+  {
+    "_id": <ObjectId>,
+    "name": <string>,
+    "age": <number>,
+    "gender": <string>,
+    "imgUrl": <string>,
+    "username": <string>,
+    "email": <string>,
+    "location": <string>,
+    "bio": <string>,
+    "preference": [
+        <string>,
+        <string>,
+        <string>
+    ],
+    "messageID": <string>
+  }...
+]
+```
+
+- 401
+
+```json
+{
+  "message": "Unauthorized"
 }
 ```
 
